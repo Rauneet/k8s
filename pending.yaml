@@ -1,0 +1,49 @@
+# Create the following - PENDING
+# Create a new role named deployent-role which only allows to create the following resource types in the finance namespace.
+# Deployment
+# StatefuleSet
+# DaemonSet
+# Create a new Service Account named cicd-token in the existing namespace finance
+# Bind the new Role deployment-role to the new serviceaccount cicd-token using Role binding deployent-role-binding limited to the namespace finance
+
+#create role
+apiVersion: rbac.authorization.k8s.io
+kind: Role
+metadata:
+  name: deployent-role
+  namespace: finance
+rules:
+  resources:  
+    - deployments
+    - statefulsets
+    - daemonsets
+  verbs:
+    - get
+    - list
+    - update
+    - create
+
+---
+
+apiVersion: rbac.authorization.k8s.io
+kind: ServiceAccount
+metadata:
+  name: cicd-token
+  namespace: finance
+
+---
+
+apiVersion: rbac.authorization.k8s.io
+kind: RoleBinding
+metadata:
+  name: deployent-role-binding
+  namespace: finance
+subjects:
+  - kind: ServiceAccount
+    name: cicd-token
+    namespace: finance
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  - kind: Role
+    name: deployment-role
+    apiGroup: rbac.authorization.k8s.io
