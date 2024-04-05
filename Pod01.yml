@@ -1,0 +1,22 @@
+# Pods 01
+# Objective
+# Learn how to create pods
+
+# Instructions
+# Choose a container image (e.g. redis, nginx, mongo, etc.)
+# Create a pod (in the default namespace) using the image you chose
+# Verify the pod is running
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod01
+  namespace: default
+  labels:
+    name: pod01
+  spec:
+    containers:
+    - name: pod01-container
+      image: redis
+      ports:
+        - containerPort: 8080

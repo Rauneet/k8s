@@ -1,0 +1,56 @@
+# Services 01
+# Objective
+# Learn how to create services
+
+# Instructions
+# Create a pod running ngnix
+# Create a service for the pod you've just created
+# Verify the app is reachable
+
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#     name: nginx-pod
+#     namespace: default
+#     labels:
+#       app: nginx-label
+#     template:
+#       matchLabels:
+#           labels:
+#               app: nginx-label
+#     spec: 
+#       containers:
+#         - name: nginx-container
+#           image: nginx:latest
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: label-demo-pod
+  labels:
+    environment: production
+    app: nginx
+  selector: 
+    matchLabels:
+        environment: production
+        app: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.14.2
+      ports:
+        - containerPort: 8081
+---
+#Creating a service for this pod so that it can be accessible within the cluster 
+apiVersion: v1
+kind: Service
+metadata:
+  name: labels-demo-service
+spec:
+  selector:
+    app: nginx
+    environment: production
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8081

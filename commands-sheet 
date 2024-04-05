@@ -1,0 +1,9 @@
+Create a role binding sample-sa-pods-read-role-binding binding service account sample-sa and role pods-read
+kubectl create rolebinding sample-sa-pods-read-role-binding --serviceaccount=default:sample-sa --role=pods-read
+
+Verify service account sample-sa can get pods using the auth can-i command.
+kubectl auth can-i get pods --as system:serviceaccount:default:sampla-sa
+
+Create the following for a user proxy-admin (which does not exist)   user-> proxy-admin
+Cluster role proxy-admin-role with permissions to nodes with get, list,create, update actions
+kubectl create role proxy-admin-role --resources=nodes --verb=get,list,create,update

@@ -1,0 +1,30 @@
+# Create the following for a user proxy-admin (which does not exist)   user-> proxy-admin
+# Cluster role proxy-admin-role with permissions to nodes with get, list,create, update actions
+apiVersion: rbac.authorization.k8s.io
+kind: ClusterRole
+metadata:
+  name: proxy-admin-role
+  namespace: default
+verbs:
+  - get
+  - List
+  - create
+  - update
+resources:  
+  - nodes
+
+---
+# Cluster role binding proxy-admin-role-binding to bind cluster role proxy-admin-role to user proxy-admin
+apiVersion: rbac.authorization.k8s.io
+kind: ClusterRoleBinding
+metadata:
+  name: proxy-admin-role-binding
+  namespace: default
+subjects:
+  - kind: User
+    name: proxy-admin
+    namespace: default
+roleRef:
+  kind: ClusterRole
+  name: proxy-admin-role
+  apiGroup: rbac.authorization.k8s.io

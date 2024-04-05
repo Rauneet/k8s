@@ -1,0 +1,9 @@
+
+# # Check if one of the nodes in the cluster has taints (doesn't matter which node)
+#   kubectl get taints node01
+# # Create a taint on one of the nodes in your cluster with key of "app" and value of "web" and effect of "NoSchedule"
+#  kubectl taint node node01 app=web:NoSchedule
+# # Explain what it does exactly
+# # Verify it was applied
+# # Run a Pod that will be able to run on the node on which you applied the taint
+#  use toleration in the pod manifest file

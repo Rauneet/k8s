@@ -1,0 +1,32 @@
+# ReplicaSet 101
+# Objective
+# Learn how to create and view ReplicaSets
+
+# Instructions
+# Create a ReplicaSet with 2 replicas. The app can be anything.
+# Verify a ReplicaSet was created and there are 2 replicas
+# Delete one of the Pods the ReplicaSet has created
+# If you'll list all the Pods now, what will you see?
+# Remove the ReplicaSet you've created
+# Verify you've deleted the ReplicaSet
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: frontend-container
+        image: us-docker.pkg.dev/google-samples/containers/gke/gb-frontend:v5

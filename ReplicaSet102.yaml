@@ -1,0 +1,33 @@
+# ReplicaSet 102
+# Objective
+# Learn how to operate ReplicaSets
+
+# Instructions
+# Create a ReplicaSet with 2 replicas. The app can be anything.
+# Verify a ReplicaSet was created and there are 2 replicas
+# Remove the ReplicaSet but NOT the pods it created
+# Verify you've deleted the ReplicaSet but the Pods are still running
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+    name: replicaset102
+    namespace: default
+    labels:
+      app: notebook
+      tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+        app: notebook
+        tier: frontend
+  template:
+    metadata:
+      labels:
+        app: notebook
+        tier: frontend
+    spec: 
+      containers:
+      - name: frontend-container
+        image: us-docker.pkg.dev/google-samples/containers/gke/gb-frontend:v5

@@ -1,0 +1,8 @@
+# Node Selectors
+# Objectives
+# Apply the label "hw=max" on one of the nodes in your cluster
+# Create and run a Pod called some-pod with the image redis and configure it to use the selector hw=max
+# Explain why node selectors might be limited
+1 kubectl get nodes -o wide 
+2 kubectl get nodes -o wide --show-labels 
+3 kubectl label nodes node01 hw=max

@@ -1,0 +1,17 @@
+# Run Pod with a web service (e.g. httpd)
+# Verify the web service is running with the ps command
+# Check how many restarts the pod has performed
+# Kill the web service process
+# Check how many restarts the pod has performed
+# Verify again the web service is running
+apiVersion: v1
+kind: Pod
+metadata:
+  name: webservice-pod
+  spec: 
+    containers:
+    - name: webservice-container
+      image: httpd:latest
+      ports:  
+      - containerPort: 80
+  nodeName: node01

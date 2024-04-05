@@ -1,0 +1,32 @@
+# ReplicaSet 103
+# Objective
+# Learn how labels used by ReplicaSets
+
+# Instructions
+# Create a ReplicaSet with 2 replicas. Make sure the label used for the selector and in the Pods is "type=web"
+# Verify a ReplicaSet was created and there are 2 replicas
+# List the Pods running
+# Remove the label (type=web) from one of the Pods created by the ReplicaSet
+# List the Pods running. Are there more Pods running after removing the label? Why?
+  #Yes there are more pods after removing the labels from one of the pod this is because the replicaset ensures that always the desired number of replicas should be maintained 
+# Verify the ReplicaSet indeed created a new Pod
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+    name: replicaset103
+    labels:
+      type: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      type: web
+  template:
+    metadata:
+      labels:
+        type: web
+    spec: 
+      containers:
+          - name: ReplicaSet103
+            image: us-docker.pkg.dev/google-samples/containers/gke/gb-frontend:v5
