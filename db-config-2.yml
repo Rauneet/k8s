@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: db-config-2
+#file like property for copnfigmap
+#we should now consume the file type configmap to a pod manifest 
+data:
+  db.properties: |  #specify the filename here            
+    DB_HOST=db.example.com
+    DB_USER=development
+    DB_PASSWD=password
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmapfiletype-pod
+spec:
+  containers:
+    - name: configmapfiletype-container
+      image: mongo:latest
+      volumeMount:
+        name: configmap-volume                                          #name of volume
+        mountPath: /etc/config                                          #specify the path here 
+  volumes:
+    - name: configmap-volume
+      configMap:
+        name: db-config-2                                        #name of configmap
+        items:
+          - key: "db.properties"                                                 #specify the key here 
+            path: "db.properties"  #specify the filename of the configmap                                                  #path goes here of the configmap

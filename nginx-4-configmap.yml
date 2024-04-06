@@ -1,0 +1,31 @@
+# Create a new pod nginx-4 with nginx image and mount the configmap db-config-1 as a volume named db-config and mount path /config
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-4-configmap
+data:
+    DB_HOST: db.example.com
+    DB_USER: development
+    DB_PASSWD: password
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-4
+spec:
+  containers:
+    - name: nginx-4-container
+      image: nginx
+#mount the configmap inside the container as a volume 
+      volumeMounts:
+      - name: db-config
+        mountPath: "/config"   #this will be create the directory inside the container {/config/nginx-4-configmap}
+        readOnly: true
+#creates a volume named db-config and inside the configMap give the name of the configMap you want to refer
+  volumes:
+    - name: db-config
+      configMap:
+        name: nginx-4-configmap

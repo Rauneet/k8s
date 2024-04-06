@@ -1,0 +1,42 @@
+# Create a configmap named db-config-1 with data DB_HOST=db.example.com, DB_USER=development, DB_PASSWD=password
+
+#We can refer the configMap in the pod, Deployment etc 
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-config-1
+data:
+  DB_HOST: db.example.com
+  DB_USER: development
+  DB_PASSWD: password
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configmap-pod
+spec:
+  containers:
+    - name: configmap-pod-container
+      image: mongo:latest
+      env:
+        - name: db_host
+          valueFrom:
+            configMapKeyRef:
+              name: db-config-1
+              key: DB_HOST
+        - name: db_user
+          valueFrom:
+            configMapKeyRef:
+                name: db-config-1
+                key: DB_USER
+        - name: db_password
+          valueFrom:
+            configMapKeyRef:
+              name: db-config-1
+              key: DB_PASSWD     
+      ports:
+        - containerPort: 8080
+
