@@ -1,0 +1,42 @@
+# Configure a pod with a volume from a ConfigMap. 
+# The ConfigMap should contain configuration files, 
+# and the volume should be mounted on two containers within the pod, 
+# allowing both containers to read the configuration.
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmapvolume
+data:
+  # file-like keys
+  config1.conf: |     #filename is config1.conf
+    parameter1=value1
+    parameter2=value2    
+  config2.conf: |
+    parameter3=value3
+    parameter4=value4
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configpod
+spec: 
+  containers:
+    - name: container1
+      image: busybox
+      command: ["sleep", "5"]
+      volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+    - name: container2
+      image: busybox
+      command: ["sleep", "3600"]
+      volumeMounts:
+        - name: config-volume
+          mountPath: /etc/config
+  volumes:  
+    - name: config-volume
+      configMap:
+        name: configmapvolume

@@ -1,0 +1,42 @@
+# Create a deployment as follows:
+# Name: nginx-random using the nginx image
+# Exposed via a service nginx-random
+# Ensure that the service & pod are accessible via their respective DNS records
+# Use the utility nslookup to lookup the DNS records of the service & pod
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-random
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 8085
+        
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-random
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8085

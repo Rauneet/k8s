@@ -1,0 +1,22 @@
+# Create pod nginx-annotations and Annotate it with description='my description' value
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-annotations-pod
+  namespace: default
+  annotations:
+    description: 'my description'
+spec:
+  containers:
+    - image: nginx:latest
+      name: nginx-annotations-container
+      ports:
+        - containerPort: 8082
+      resources:
+        requests:
+          cpu: 250m
+          memory: 64Mi
+        limits:
+          cpu: 100m
+          memory: 32Mi

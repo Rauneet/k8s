@@ -1,0 +1,58 @@
+# As a Kubernetes application developer you will often find yourself needing to update a running application. Please complete the following using the following specs:
+# Update the web1 deployment with a maxSurge of 5% and a maxUnavailable of 2%
+# Perform a rolling update of the web1 deployment, changing the nginx image version to 1.21
+# Roll back the web1 deployment to the previous version
+
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: web1
+  labels:
+    app: web1
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: web1
+  template:
+    metadata:
+      labels:
+        app: web1
+    spec:
+      containers:
+        - name: web1
+          image: nginx:1.21
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 5%
+        maxUnavailable: 2%
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: web1
+ labels:
+   app: web1
+spec:
+ replicas: 10
+ selector:
+   matchLabels:
+     app: web1
+ template:
+   metadata:
+     labels:
+       app: web1
+   spec:
+     containers:
+     - name: nginx
+       image: nginx:1.21-alpine
+       ports:
+       - containerPort: 80
+ strategy:
+   type: RollingUpdate
+   rollingUpdate:
+     maxSurge: 5%
+     maxUnavailable: 2%

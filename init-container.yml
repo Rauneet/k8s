@@ -1,0 +1,34 @@
+# Init Containers
+# Update the below specs for nginx pod with /usr/share/nginx/html directory mounted on volume workdir.
+# Add an init container named install with image busybox.
+# Mount the workdir to the init container.
+# wget the http://info.cern.ch and save as index.html to the workdir in the init container.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-demo
+spec:
+  containers:
+    - name: nginx
+      image: nginx
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: workdir
+          mountPath: /usr/share/nginx/html
+  initContainers:
+    - name: install
+      image: busybox
+      command:
+        - "wget"
+        - "-O"
+        - "/workdir/index.html"
+        - "http://info.cern.ch"
+      volumeMounts:
+        - name: workdir
+          mountPath: "/workdir"
+  volumes:
+    - name: workdir
+      emptyDir: {}
+

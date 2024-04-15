@@ -1,0 +1,21 @@
+# Ensure a single instance of pod nginx is running on each node of the Kubernetes cluster where nginx also represents the image name which has to be used. Do not override anytaints currently in place.
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-pod-instance
+  labels:
+    app: nginx-instance
+spec:
+  selector:
+    matchLabels:
+      app: nginx-instance
+  template:
+    metadata:
+      labels:
+        app: nginx-instance
+  containers:
+    - name: nginx-instance-container
+      image: nginx
+      ports:
+        - containerPort: 8083
+      resources: {}

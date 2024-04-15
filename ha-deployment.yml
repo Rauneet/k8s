@@ -1,0 +1,51 @@
+# Scale the deployment with below specs for availability, and create a service to expose the deployment within your infrastructure. Start with the deployment named ha-deployment which has already been deployed to the namespace ha .
+# Edit it to:
+
+# create namespace ha
+# Add the func=frontend key/value label to the pod template metadata to identify the pod for the service definition
+# Have 4 replicas
+# Exposes the service on TCP port 8080
+# is mapped to the pods defined by the specification of ha-deployment
+# Is of type NodePort
+# Has a name of cherry
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ha-deployment
+  namespace: ha
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: ha-deployment
+      func: frontend
+  template:
+    metadata:
+      labels:
+        app: ha-deployment
+        func: frontend
+    spec:
+      containers:
+      - name: frontend-container
+        image: nginx:latest
+        ports:
+        - containerPort: 8080
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: cherry
+  namespace: ha 
+spec:
+  type: NodePort
+  selector:
+    func: frontend
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30080
+

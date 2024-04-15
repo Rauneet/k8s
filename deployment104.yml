@@ -1,0 +1,26 @@
+# Create a deployment as follows:
+# Name: nginx-app
+# Using container nginx with version 1.20-alpine
+# The deployment should contain 3 replicas
+# Next, deploy the application with new version 1.21.4-alpine, by performing a rolling update.
+# Finally, rollback that update to the previous version 1.11.10-alpine.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx:1.20-alpine
+        name: nginx104

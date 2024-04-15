@@ -1,0 +1,28 @@
+# Consider a scenario where a service requires a substantial amount of time to load data into memory during startup before it can handle requests. 
+# How would you use a readiness probe to manage traffic flow to the pod?
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness 
+  labels:
+    test: readiness
+spec:
+  containers:
+  - name: readiness-container
+    image: nginx
+    resources:
+      requests:
+        cpu: "250m"
+        memory: "64Mi"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 8080
+    readinessProbe:
+      httpGet:
+        path: /healthz
+        port: 8080
+      initialDelaySeconds: 15
+      periodSeconds: 15

@@ -1,0 +1,25 @@
+# Question 1: Create a pod with two containers, both using the same emptyDir volume. 
+# Container A should write the current date to a file in the volume, 
+# and Container B should read this file and log it to its standard output.
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-demo
+spec:
+  containers:
+    - name: writer
+      image: busybox
+      command: ["sh", "-c", "date > /usr/share/data"]
+      volumeMounts:
+        - name: read-write-volume
+          mountPath: /usr/share/data
+    - name: reader
+      image: busybox
+      command: ["sh", "-c", "cat /usr/share/data/data.txt && sleep 3600"]
+      volumeMounts:
+        - name: read-write-volume
+          mountPath: /usr/share/data
+  volumes:
+    - name: read-write-volume
+      emptyDir: {}

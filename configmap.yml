@@ -1,0 +1,55 @@
+# A configmap is an api object used to store the non confidential data in a key-value pair 
+#it is more likely to store the configuration data 
+#pods can consume the configmap as an environment variables or command line arguments or configuration files as a volume 
+#it is easily portable 
+
+
+# Create a new pod nginx-1 with nginx image and add env variable for DB_HOST=db.example.com, DB_USER=development, DB_PASSWD=password
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-1-configmap
+data:
+  DB_HOST: db.example.com
+  DB_USER: development
+  DB_PASSWD: password
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+    name: nginx-1
+    namespace: default
+spec:
+    containers:
+        - name: nginx-1-container
+          image: nginx
+          env:
+            - name: DB_HOST
+              valueFrom:
+                  configMapKeyRef:
+                      name: DB_HOST
+                      key: DB_HOST
+            - name: DB_USER
+              valueFrom:
+                  configMapKeyRef:
+                      name: DB_USER
+                      key: DB_USER
+            - name: DB_PASSWD
+              valueFrom:
+                  configMapKeyRef:
+                      name: DB_PASSWD
+                      key: DB_PASSWD
+          ports:
+          - containerPort: 8001
+          resources:
+              requests:
+                cpu: 250m
+                memory: 64Mi
+              limits:
+                cpu: 100m
+                memory: 32Mi
+
+
+

@@ -1,0 +1,54 @@
+# ConfigMap as a Volume:
+
+# Create a ConfigMap with some configuration data and mount it in a pod. 
+# How would you mount this ConfigMap in two containers within the same pod 
+# so that both containers can read the ConfigMap data from the path /etc/config?
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config-map
+  namespace: default
+#file type this is the sample data not the actual data 
+data:
+  config1.conf: |
+      [database]
+      host = db.example.com   
+      port = 5432
+      user = dbuser
+      password = dbpassword
+      dbname = myappdb
+
+  config2.conf: |
+      [pool]
+      max_connections = 100
+      idle_timeout = 300
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  namespace: default
+  labels:
+    name: my-pod
+spec:
+  containers:
+  - name: container1
+    image: busybox
+    command: ["/bin/sh", "-c","sleep 3000"]
+    volumeMounts:
+      - name: my-vol
+        mountPath: /etc/config
+  - name: container2
+    image: busybox
+    command: ["/bin/sh", "-c", "sleep 3600"]
+    volumeMounts:
+      - name: my-vol
+        mountPath: /etc/config
+  volumes:
+    - name: my-vol
+      configMap:
+        name: my-config-map
+

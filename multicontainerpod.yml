@@ -1,0 +1,31 @@
+# Temporary Storage with emptyDir:
+
+# Describe how to use an emptyDir volume in a multi-container pod 
+# where one container writes logs to this volume and another container reads from it.
+#  What happens to the data in the emptyDir when the pod is deleted?
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-container-pod
+  labels:
+    name: multi-container-pod
+spec:
+  containers:
+  - name: writer-container
+    image: busybox
+    volumeMounts:
+      - name: log-volume
+        mountPath: /var/log
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do date >> /var/log/app.log; sleep 5; done"]
+  - name: reader-container
+    image: busybox
+    command: ["/bin/sh"]
+    args: ["-c", "tail -f /var/log/app.log"]
+    volumeMounts:
+      - name: log-volume
+        mountPath: /var/log
+  volumes:
+    - name: log-volume
+      emptyDir: {}
